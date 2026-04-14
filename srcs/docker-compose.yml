@@ -1,0 +1,17 @@
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    container_name: mariadb
+    env_file: .env
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - inception
+    restart: always
+
+volumes:
+  db_data:
+
+networks:
+  inception:
+    driver: bridge
