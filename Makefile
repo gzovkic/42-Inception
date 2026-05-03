@@ -7,28 +7,28 @@ all: build up
 
 build:
 	@echo "🔨 Building Docker images..."
-	docker-compose -f $(COMPOSE_FILE) build
+	docker compose -f $(COMPOSE_FILE) build
 
 up:
 	@echo "🚀 Starting containers..."
-	docker-compose -f $(COMPOSE_FILE) up -d
+	docker compose -f $(COMPOSE_FILE) up -d
 
 down:
 	@echo "🛑 Stopping containers..."
-	docker-compose -f $(COMPOSE_FILE) down
+	docker compose -f $(COMPOSE_FILE) down
 
 clean: down
 	@echo "🧹 Cleaning up volumes and images..."
-	docker-compose -f $(COMPOSE_FILE) down -v
+	docker compose -f $(COMPOSE_FILE) down -v
 	docker system prune -f
 
 logs:
 	@echo "📋 Showing logs..."
-	docker-compose -f $(COMPOSE_FILE) logs -f
+	docker compose -f $(COMPOSE_FILE) logs -f
 
 ps:
 	@echo "📊 Running containers..."
-	docker-compose -f $(COMPOSE_FILE) ps
+	docker compose -f $(COMPOSE_FILE) ps
 
 restart: down up
 	@echo "🔄 Project restarted!"
