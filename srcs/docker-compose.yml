@@ -5,7 +5,7 @@ services:
     container_name: mariadb
     env_file: .env
     volumes:
-      - /home/gzovkic/data/mariadb:/var/lib/mysql
+      - db_data:/var/lib/mysql
     networks:
       - inception
     restart: always
@@ -18,7 +18,7 @@ services:
       - mariadb
     env_file: .env
     volumes:
-      - /home/gzovkic/data/wordpress:/var/www/html
+      - wp_data:/var/www/html
     networks:
       - inception
     restart: always
@@ -32,7 +32,7 @@ services:
     ports:
       - "443:443"
     volumes:
-      - /home/gzovkic/data/wordpress:/var/www/html
+      - wp_data:/var/www/html
     networks:
       - inception
     restart: always
@@ -40,3 +40,17 @@ services:
 networks:
   inception:
     driver: bridge
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/gzovkic/data/mariadb
+  wp_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/gzovkic/data/wordpress
