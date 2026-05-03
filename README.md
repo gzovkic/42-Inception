@@ -60,17 +60,18 @@ make help       # Show all available commands
 1. **MariaDB** (Database)
    - Stores WordPress data
    - Port: 3306 (internal only)
-   - Data volume: `db_data`
+   - Data volume: `db_data` → `/home/gzovkic/data/mariadb/`
 
 2. **WordPress + PHP-FPM**
    - Web application processing
    - Port: 9000 (internal only, communicates with NGINX)
-   - Files volume: `wp_data`
+   - Files volume: `wp_data` → `/home/gzovkic/data/wordpress/`
 
 3. **NGINX** (Web Server)
    - Reverse proxy, SSL/TLS termination
    - Port: 443 (HTTPS only)
    - TLS versions: 1.2 and 1.3
+   - Shares WordPress volume for static file serving
 
 ### Network Architecture
 
@@ -152,29 +153,41 @@ AI was used to:
 
 ```
 42-Inception/
-├── Makefile                 # Build automation
-├── README.md               # This file
-├── USER_DOC.md             # User documentation
-├── DEV_DOC.md              # Developer documentation
-├── secrets/                # Confidential data (gitignored)
-│   ├── db_password.txt
-│   └── db_root_password.txt
+├── Makefile                    # Build automation
+├── .gitignore                  # Git ignore rules (credentials, volumes)
+├── README.md                   # This file
+├── USER_DOC.md                 # User documentation
+├── DEV_DOC.md                  # Developer documentation
+├── eval_helper/                # Evaluation helper scripts
+│   └── test_db.sh              # Database verification script
 └── srcs/
-    ├── .env                # Environment variables
-    ├── docker-compose.yml  # Service orchestration
+    ├── docker-compose.yml      # Service orchestration
     └── requirements/
-        ├── mariadb/        # Database service
+        ├── mariadb/            # Database service
         │   ├── Dockerfile
         │   ├── conf/
+        │   │   └── 50-server.cnf
         │   └── tools/
-        ├── wordpress/      # Application service
+        │       └── init.sh
+        ├── wordpress/          # Application service
         │   ├── Dockerfile
-        │   ├── conf/
+        │   ├── conf/           # (if needed)
         │   └── tools/
-        └── nginx/          # Web server service
+        │       └── setup.sh
+        └── nginx/              # Web server service
             ├── Dockerfile
             ├── conf/
-            └── tools/
+            │   └── nginx.conf
+            └── tools/          # (if needed)
+```
+
+### Volume Storage Locations
+
+Data is persisted at:
+- **Database:** `/home/gzovkic/data/mariadb/`
+- **WordPress:** `/home/gzovkic/data/wordpress/`
+
+These volumes are managed as Docker named volumes with bind mount configuration.
 ```
 
 ## Troubleshooting

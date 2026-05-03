@@ -177,7 +177,6 @@ EXIT;
 ### Test Website Connectivity
 
 ```bash
-# Check if NGINX is responding
 curl -k https://gzovkic.42.fr
 ```
 
@@ -195,10 +194,8 @@ curl -k https://gzovkic.42.fr
 
 **Solution:**
 ```bash
-# Stop everything
 make down
 
-# Clean up and restart
 make clean
 make all
 ```
@@ -224,10 +221,8 @@ This is normal for self-signed certificates. In your browser:
 Files are stored in a Docker volume. To verify files are persisted:
 
 ```bash
-# List volume contents
 docker volume ls
 
-# Inspect WordPress volume
 docker volume inspect srcs_wp_data
 ```
 
@@ -250,11 +245,9 @@ On your host machine, volumes are typically stored at:
 To save your WordPress data:
 
 ```bash
-# Backup WordPress files
 docker run --rm -v srcs_wp_data:/data -v $(pwd):/backup ubuntu \
   tar czf /backup/wordpress_backup.tar.gz -C /data .
 
-# Backup database
 docker-compose -f srcs/docker-compose.yml exec mariadb mariadb-dump \
   -uroot -p$MYSQL_ROOT_PASSWORD wordpress > wordpress_backup.sql
 ```
